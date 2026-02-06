@@ -1,5 +1,8 @@
 # Visual Studio
 .vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
 *.vcxproj.user
 *.suo
 *.user
@@ -12,6 +15,7 @@ Release/
 x64/
 x86/
 out/
+build/
 
 # Compiled binaries
 *.exe
