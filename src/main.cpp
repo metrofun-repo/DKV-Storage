@@ -1,20 +1,48 @@
-// DKV-Store.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#include "app/DKVApp.h"
 
-#include <iostream>
-
-int main()
+AppConfig parseArgs(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
+    AppConfig cfg;    
+
+    for(int i = 0; i < argc; ++i)
+    {
+        std::string arg = argv[i];
+
+        if(arg == "--host" && i + 1 < argc)
+        {
+            cfg.host = argv[++i];
+        }
+        else if(arg == "--port" && i + 1 < argc)
+        {
+            cfg.port = std::stoi(argv[++i]);
+        }
+        else if(arg == "--peer" && i + 1 < argc)
+        {
+            std::string peer = argv[++i];
+            auto pos = peer.find(':');
+            if(pos == std::string::npos)
+            {
+                throw std::runtime_error("Invalid peer format, expected host:port");
+            }
+            cfg.peers.emplace_back(peer.substr(0, pos), std::stoi(peer.substr(pos + 1)));
+        }
+        else if(arg == "dkv_server.exe")
+        {
+            continue;
+        }
+        else
+        {
+            std::cerr << "Unknown argumnet: " << arg << std::endl;
+        }
+    }
+    return cfg;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+int main(int argc, char* argv[])
+{
+    DKVApp app(parseArgs(argc, argv));
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+    app.run();
+
+    return 0;
+}
