@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "store/KeyValueStorage.h"
+#include "storage/KeyValueStorage.h"
 
 TEST(KeyValueStorageTest, PutAndGet) {
     KeyValueStorage cache;

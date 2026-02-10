@@ -1,19 +1,23 @@
-#include "HttpMethodHandler.h"
+#include "PublicHttpHandler.h"
 
-#include <chrono>
+
+#include <nlohmann/json.hpp>
 
 #include "interfaces/IRequest.h"
 #include "interfaces/IResponse.h"
 
-#include "http/Routes.h"
 #include "http/HttpServer.h"
 #include "http/HttpConstants.h"
 
-#include "service/KeyValueService.h"
+#include "storage/KeyValueService.h"
+#include "cluster/service/ReplicationService.h"
 
-HttpMethodHandler::HttpMethodHandler(KeyValueService& service) : service(service) {}
+PublicHttpHandler::PublicHttpHandler(KeyValueService& service, ReplicationService& replica)
+    : service(service)
+    , replicaService(replica)
+{}
 
-void HttpMethodHandler::handleSet(const IRequest& req, IResponse& res)
+void PublicHttpHandler::handleSet(const IRequest& req, IResponse& res)
 {
     if(!req.hasParam(Http::Param::KEY))
     {
@@ -31,13 +35,13 @@ void HttpMethodHandler::handleSet(const IRequest& req, IResponse& res)
 
     auto key = req.getParam(Http::Param::KEY);
 
-    service.set(key, req.getBody());
+    replicaService.replicateSet(key, req.getBody());
 
     res.setStatus(httplib::StatusCode::OK_200);
     res.setContent("Value succesfully saved", "text/plain");
 }
 
-void HttpMethodHandler::handleGet(const IRequest& req, IResponse& res)
+void PublicHttpHandler::handleGet(const IRequest& req, IResponse& res)
 {
     if(!req.hasParam(Http::Param::KEY))
     {
@@ -58,7 +62,7 @@ void HttpMethodHandler::handleGet(const IRequest& req, IResponse& res)
     res.setStatus(httplib::OK_200);
     res.setContent(value.value(), "text/plain");
 }
-void HttpMethodHandler::handleRemove(const IRequest& req, IResponse& res)
+void PublicHttpHandler::handleRemove(const IRequest& req, IResponse& res)
 {
     if(!req.hasParam(Http::Param::KEY))
     {
@@ -67,7 +71,7 @@ void HttpMethodHandler::handleRemove(const IRequest& req, IResponse& res)
         return;
     }
     auto key = req.getParam(Http::Param::KEY);
-    service.remove(key);
+    replicaService.replicateRemove(key);
 
     res.setStatus(httplib::StatusCode::OK_200);
     res.setContent("Value succesfully removed", "text/plain");

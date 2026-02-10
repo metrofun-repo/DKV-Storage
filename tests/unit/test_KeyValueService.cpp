@@ -1,13 +1,13 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <store/KeyValueStorage.h>
-#include <service/KeyValueService.h>
+#include <storage/KeyValueStorage.h>
+#include <storage/KeyValueService.h>
 
 TEST(KeyValueServiceTest, SetAndGet) {
     KeyValueStorage cache;
     KeyValueService service(cache);
-    service.set("key", "value");
+    service.set("key", "value", 0);
 
     auto result = service.get("key");
     ASSERT_TRUE(result.has_value());
@@ -25,7 +25,7 @@ TEST(KeyValueServiceTest, GetMisingKey) {
 TEST(KeyValueServiceTest, SetGetRemove) {
     KeyValueStorage cache;
     KeyValueService service(cache);
-    service.set("key", "value");
+    service.set("key", "value", 0);
 
     auto result = service.get("key");
     ASSERT_TRUE(result.has_value());
