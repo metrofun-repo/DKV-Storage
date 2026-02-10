@@ -1,16 +1,24 @@
 #include <gtest/gtest.h>
-#include "tests/mock/MockHttpServer.h"
-#include "store/KeyValueStorage.h"
-#include "service/KeyValueService.h"
 
-#include "http/HttpMethodHandler.h"
-#include "http/RoutesRegistrar.h"
-#include "http/Routes.h"
-TEST(RouteRegistar, RegisterPublicRoutes) {
+#include "tests/mock/MockHttpServer.h"
+#include "tests/mock/MockReplicationClient.h"
+
+#include "storage/KeyValueStorage.h"
+#include "storage/KeyValueService.h"
+
+#include "api/public/PublicHttpHandler.h"
+#include "api/public/PublicRouteRegistrar.h"
+#include "api/public/Routes.h"
+
+#include "cluster/service/ReplicationService.h"
+
+TEST(RouteRegistrarTest, RegisterPublicRoutes) {
     KeyValueStorage storage;
     KeyValueService service(storage);
-    HttpMethodHandler handler(service);
-    RoutesRegistrar registrar(handler);
+    MockReplicationClient client;
+    ReplicationService replicaService(service, client);
+    PublicHttpHandler handler(service, replicaService);
+    PublicRouteRegistrar registrar(handler);
 
     MockHttpServer server;
 

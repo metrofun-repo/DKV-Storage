@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(DKVApp
+project(App
     VERSION 0.1
     DESCRIPTION "Distributed Key-Value Store App (educational project)"
     LANGUAGES CXX
@@ -15,6 +15,12 @@ FetchContent_Declare(
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+
+FetchContent_Declare(
+    json 
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
+FetchContent_MakeAvailable(json)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -31,11 +37,13 @@ set(LIB_SOURCES ${SOURCES})
 list(FILTER LIB_SOURCES EXCLUDE REGEX "src/main.cpp")
 
 add_library(dkv_server_core STATIC ${LIB_SOURCES})
+target_link_libraries(dkv_server_core PRIVATE nlohmann_json::nlohmann_json)
 
 # create executable file
 add_executable(dkv_server src/main.cpp)
 
 target_link_libraries(dkv_server PRIVATE dkv_server_core)
+target_link_libraries(dkv_server PRIVATE nlohmann_json::nlohmann_json)
 
 # Include directories
 target_include_directories(dkv_server_core PUBLIC

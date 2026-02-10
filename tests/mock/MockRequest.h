@@ -1,6 +1,5 @@
 #pragma once
 
-#include <gtest/gtest.h>
 #include <unordered_map>
 #include "interfaces/IRequest.h"
 

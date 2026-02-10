@@ -1,6 +1,6 @@
 #include "KeyValueStorage.h"
 
-void KeyValueStorage::put(const std::string& key, const std::string& value, timestamp_t timestamp)
+void KeyValueStorage::put(const std::string& key, const std::string& value, uint64_t timestamp)
 {
     if(auto it = map.find(key); it == map.end() || it->second.timestamp < timestamp)
     {

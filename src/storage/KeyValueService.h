@@ -5,13 +5,13 @@
 
 class KeyValueStorage;
 
-class  KeyValueService
+class KeyValueService
 {
     KeyValueStorage& storage;
 public:
     KeyValueService(KeyValueStorage& storage);
 
-    void set(const std::string& key, const std::string& value);
+    void set(const std::string& key, const std::string& value, uint64_t timestamp);
     std::optional<std::string> get(const std::string& key);
     void remove(const std::string& key);
 };

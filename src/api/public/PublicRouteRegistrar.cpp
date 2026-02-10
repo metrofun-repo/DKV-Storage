@@ -1,16 +1,19 @@
-#include "RoutesRegistrar.h"
+#include "PublicRouteRegistrar.h"
 
 #include "third-party/httplib.h"
-#include "HttpMethodHandler.h"
-#include "Routes.h"
+
+#include "PublicHttpHandler.h"
+
+#include "api/public/Routes.h"
+
 #include "interfaces/IRequest.h"
 #include "interfaces/IResponse.h"
 #include "interfaces/IHttpServer.h"
 
-RoutesRegistrar::RoutesRegistrar(HttpMethodHandler& hndlr) : handler(hndlr)
+PublicRouteRegistrar::PublicRouteRegistrar(PublicHttpHandler& hndlr) : handler(hndlr)
 {}
 
-void RoutesRegistrar::registerPublicRoutes(IHttpServer& server)
+void PublicRouteRegistrar::registerPublicRoutes(IHttpServer& server)
 {
     server.set(Routes::Public::SET, [&](const IRequest& req, IResponse& res)
     {

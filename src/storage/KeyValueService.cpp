@@ -1,17 +1,15 @@
 #include "KeyValueService.h"
 
-#include "store/KeyValueStorage.h"
-
-#include <chrono>
+#include "storage/KeyValueStorage.h"
 
 KeyValueService::KeyValueService(KeyValueStorage& storage)
     : storage(storage)
 {
 }
 
-void KeyValueService::set(const std::string& key, const std::string& value)
+void KeyValueService::set(const std::string& key, const std::string& value, uint64_t timestamp)
 {
-    storage.put(key, value, std::chrono::steady_clock::now().time_since_epoch().count());
+    storage.put(key, value, timestamp);
 }
 
 std::optional<std::string> KeyValueService::get(const std::string& key)

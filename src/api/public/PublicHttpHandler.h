@@ -4,11 +4,14 @@ class IRequest;
 class IResponse;
 class KeyValueService;
 
-class HttpMethodHandler
+class ReplicationService;
+
+class PublicHttpHandler
 {
     KeyValueService& service;
+    ReplicationService& replicaService;
 public:
-    HttpMethodHandler(KeyValueService& service);
+    PublicHttpHandler(KeyValueService& service, ReplicationService& replica);
 
     void handleSet(const IRequest& req, IResponse& res);
     void handleGet(const IRequest& req, IResponse& res);

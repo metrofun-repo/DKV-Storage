@@ -1,18 +1,23 @@
 #include <gtest/gtest.h>
 
-#include "store/KeyValueStorage.h"
-#include "service/KeyValueService.h"
-#include "http/HttpMethodHandler.h"
+#include "storage/KeyValueStorage.h"
+#include "storage/KeyValueService.h"
+#include "api/public/PublicHttpHandler.h"
 
 #include "tests/mock/MockRequest.h"
 #include "tests/mock/MockResponse.h"
+#include "tests/mock/MockReplicationClient.h"
 
-TEST(HttpMethodHandlerTest, GetReturnsValueIfExists) {
+#include "cluster/service/ReplicationService.h"
+
+TEST(PublicHttpHandlerTest, GetReturnsValueIfExists) {
     KeyValueStorage storage;
-    KeyValueService service(storage);
-    HttpMethodHandler handler(service);
+    KeyValueService keyValueService(storage);
+    MockReplicationClient client;
+    ReplicationService replicaService(keyValueService, client);
+    PublicHttpHandler handler(keyValueService, replicaService);
 
-    service.set("key", "value");
+    keyValueService.set("key", "value", 0);
 
     MockRequest req;
     req.params["key"] = "key";
@@ -25,10 +30,12 @@ TEST(HttpMethodHandlerTest, GetReturnsValueIfExists) {
     EXPECT_EQ(res.body, "value");
 }
 
-TEST(HttpMethodHandlerTest, GetReturns404IfNotFound) {
+TEST(PublicHttpHandlerTest, GetReturns404IfNotFound) {
     KeyValueStorage storage;
-    KeyValueService service(storage);
-    HttpMethodHandler handler(service);
+    KeyValueService keyValueService(storage);
+    MockReplicationClient client;
+    ReplicationService replicaService(keyValueService, client);
+    PublicHttpHandler handler(keyValueService, replicaService);
 
     MockRequest req;
     req.params["key"] = "missing";
@@ -41,10 +48,12 @@ TEST(HttpMethodHandlerTest, GetReturns404IfNotFound) {
     EXPECT_EQ(res.body, "No value found in storage");
 }
 
-TEST(HttpMethodHandlerTest, PostStoresValue) {
+TEST(PublicHttpHandlerTest, PostStoresValue) {
     KeyValueStorage storage;
-    KeyValueService service(storage);
-    HttpMethodHandler handler(service);
+    KeyValueService keyValueService(storage);
+    MockReplicationClient client;
+    ReplicationService replicaService(keyValueService, client);
+    PublicHttpHandler handler(keyValueService, replicaService);
 
     MockRequest req;
     req.params["key"] = "abc";
@@ -55,5 +64,5 @@ TEST(HttpMethodHandlerTest, PostStoresValue) {
     handler.handleSet(req, res);
 
     EXPECT_EQ(res.status, 200);
-    EXPECT_EQ(service.get("abc"), "value007");
+    EXPECT_EQ(keyValueService.get("abc"), "value007");    
 }
