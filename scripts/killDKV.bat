@@ -1,0 +1,1 @@
+taskkill /F /IM dkv_server.exe
