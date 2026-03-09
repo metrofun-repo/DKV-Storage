@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common/utils/json_utils.h"
-#include "application/api/types/ReplicationOperationType.h"
+#include "application/cluster/types/ReplicationOperationType.h"
 
 // json structure
 // {
@@ -14,7 +14,7 @@ namespace app::cluster::protocol {
 
 struct ReplicationRequest
 {
-    using Operation       = app::api::types::ReplicationOperationType;
+    using Operation       = app::cluster::types::ReplicationOperationType;
     using JsonParseResult = core::types::BasicResult<ReplicationRequest>;
     using OpParseResult   = core::types::BasicResult<Operation>;
     using Json            = common::json::json_t;
