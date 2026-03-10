@@ -3,9 +3,9 @@
 #include <vector>
 #include <string>
 
-#include "interfaces/IHttpServer.h"
+#include "infrastructure/http/server/HttpServer.h"
 
-class MockHttpServer : public IHttpServer
+class MockHttpServer : public infra::http::server::HttpServer
 {
 public:
     struct Route
@@ -17,17 +17,17 @@ public:
 
     std::vector<Route> routes;
 
-    void set(const std::string& path, Handler) override
+    void set(const std::string& path, HandlerFunc) override
     {
         routes.emplace_back("POST", path);
     }
 
-    void get(const std::string& path, Handler) override
+    void get(const std::string& path, HandlerFunc) override
     {
         routes.emplace_back("GET", path);
     }
 
-    void remove(const std::string& path, Handler) override
+    void remove(const std::string& path, HandlerFunc) override
     {
         routes.emplace_back("DELETE", path);
     }
