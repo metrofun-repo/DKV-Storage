@@ -1,7 +1,5 @@
 #include "ReplicationRequestValidator.h"
 
-#include "application/cluster/types/ReplicationOperationType.h"
-
 namespace app::cluster::validation {
 
 ReplicationRequestValidator::ValidationResult ReplicationRequestValidator::validate(const ReplicationRequest& msg)
