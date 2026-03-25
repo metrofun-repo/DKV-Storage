@@ -26,4 +26,10 @@ void HttplibServerResponse::setContent(std::string body, std::string contentType
     raw.set_content(std::move(body), std::move(contentType));
 }
 
+void HttplibServerResponse::setContent(const char* body, std::size_t n, std::string contentType)
+{
+    raw.set_content(body, n, std::move(contentType));
+}
+
+
 } // namespace infra::http::adapters::httplib::server

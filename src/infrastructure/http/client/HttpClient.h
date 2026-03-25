@@ -21,6 +21,7 @@ public:
         int port,
         std::string_view path,
         std::string_view body,
+        std::size_t size,
         std::string_view contentType
     ) const = 0;
 };

@@ -10,10 +10,9 @@ namespace infra::http::validation {
 class HttpRequestValidator
 {
     using ValidationResult = core::types::Expected<void, std::string>;
-    using HttpRequest      = infra::http::server::HttpRequest;
 public:
-    static ValidationResult requireParam(const HttpRequest& req, std::string_view param);
-    static ValidationResult requireBody(const HttpRequest& req);
+    static ValidationResult requireParam(const server::HttpRequest& req, std::string_view param);
+    static ValidationResult requireBody(const server::HttpRequest& req);
 };
 
 } // namespace infra::http::validation

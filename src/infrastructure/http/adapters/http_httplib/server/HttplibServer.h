@@ -6,7 +6,7 @@
 
 namespace infra::http::adapters::httplib::server {
 
-class HttplibServer : public infra::http::server::HttpServer
+class HttplibServer : public http::server::HttpServer
 {
     using libServer = ::httplib::Server;
     using NodeInfo = domain::cluster::model::NodeInfo;
@@ -15,9 +15,9 @@ public:
     explicit HttplibServer(NodeInfo info);
     explicit HttplibServer(std::string nodeId, std::string host, int port);
 
-    void set(const std::string& path, HandlerFunc handler) override;
-    void get(const std::string& path, HandlerFunc handler) override;
-    void remove(const std::string& path, HandlerFunc handler) override;
+    void set(std::string_view path, HandlerFunc handler) override;
+    void get(std::string_view path, HandlerFunc handler) override;
+    void remove(std::string_view path, HandlerFunc handler) override;
 
     void start() override;
     void stop() override;

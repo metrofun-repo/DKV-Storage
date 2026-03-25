@@ -1,20 +1,12 @@
 #include <gtest/gtest.h>
 
-#include "tests/mock/MockRequest.h"
-#include "tests/mock/MockResponse.h"
-
-#include "application/cluster/http/ReplicationHttpHandler.h"
-
-#include "application/cluster/protocol/ReplicationRequest.h"
-#include "application/cluster/services/ReplicationApplyService.h"
-
 TEST(ReplicationHttpHandlerTest, ReplicationSetValue) {
     // KVStorage storage;
     // KVService service(storage);
     // ReplicationApplyService applyService(service);
     // ReplicationHttpHandler handler(applyService);
 
-    // ReplicationRequest replicaReq { ReplicationOperationType::Set, "key", "value", 1 };
+    // ReplicationPayload replicaReq { ReplicationOperationType::Set, "key", "value", 1 };
 
     // MockRequest req;
 
@@ -38,7 +30,7 @@ TEST(ReplicationHttpHandlerTest, ReplicationRemoveValue) {
 
     // service.set("key", "value", 1);
 
-    // ReplicationRequest replicaReq { ReplicationOperationType::Delete, "key", "value", 1 };
+    // ReplicationPayload replicaReq { ReplicationOperationType::Delete, "key", "value", 1 };
 
     // MockRequest req;
     // req.body = replicaReq.toJson().dump();

@@ -1,18 +1,22 @@
 #pragma once
 
-#include <string>
+#include "Error.h"
 
 namespace core::types {
 
-struct BasicError
-{ 
-    std::string details;
-    BasicError() = default;
-    BasicError(const std::string& s) : details(s) {}
-    BasicError(const char* str) : details(str) {}
+template<>
+struct Error<void>
+{
+    std::string message;
 
-    operator const std::string& () const { return details; }
-    operator const char * () { return details.c_str(); }
+    Error() = default;
+    Error(std::string s) : message(std::move(s)) {}
+    Error(const char* str) : message(str) {}
+
+    operator const std::string& () const { return message; }
+    operator const char * () { return message.c_str(); }
 };
+
+using BasicError = Error<void>;
 
 } // namespace core::types

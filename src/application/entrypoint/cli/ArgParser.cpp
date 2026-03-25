@@ -18,7 +18,7 @@ ArgParser::Result<AppConfig> ArgParser::parse()
             auto res = readString(arg, i);
             if(!res.hasValue())
             {
-                return Result<AppConfig>::makeFailure(res.error().details);
+                return Result<AppConfig>::makeFailure(res.error().message);
             }
             cfg.nodeInfo.host = res.value();
         }
@@ -27,7 +27,7 @@ ArgParser::Result<AppConfig> ArgParser::parse()
             auto res = readString(arg, i);
             if(!res.hasValue())
             {
-                return Result<AppConfig>::makeFailure(res.error().details);
+                return Result<AppConfig>::makeFailure(res.error().message);
             }
             cfg.nodeInfo.nodeId = res.value();
         }
@@ -36,7 +36,7 @@ ArgParser::Result<AppConfig> ArgParser::parse()
             auto res = readInteger(arg, i);
             if(!res.hasValue())
             {
-                return Result<AppConfig>::makeFailure(res.error().details);
+                return Result<AppConfig>::makeFailure(res.error().message);
             }
             cfg.nodeInfo.port = res.value();
         }

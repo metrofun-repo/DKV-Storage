@@ -1,17 +1,17 @@
 #pragma once
 
-#include "error/StorageError.h"
-#include "error/ReplicationError.h"
-#include "application/cluster/protocol/FanoutResult.h"
+#include "domain/storage/error/StorageError.h"
+#include "application/cluster/protocol/ClusterError.h"
+#include "domain/replication/ReplicationFanoutResult.h"
 
 namespace app::cluster::types {
 
 struct ReplicationResult
 {
-    using FanoutResult = app::cluster::protocol::FanoutResult;
+    using FanoutResult = domain::replication::ReplicationFanoutResult;
 
-    using StorageError     = error::StorageError;
-    using ReplicationError = error::ReplicationError;
+    using StorageError = domain::storage::error::StorageError;
+    using ReplicationError = domain::replication::error::ReplicationError;
 
     using LocalApplyResult = core::types::Expected<void, StorageError>;
     using ReplicationApply = core::types::Expected<void, ReplicationError>;
@@ -26,12 +26,12 @@ struct ReplicationResult
 
     static ReplicationResult makeFailure(StorageError local)
     {
-        return { LocalApplyResult::makeFailure(local), ReplicationApply::makeSuccess(), {} };
+        return { LocalApplyResult::makeFailure(std::move(local)), ReplicationApply::makeSuccess(), {} };
     }
 
-    static ReplicationResult makeFailure(ReplicationError replic, FanoutResult fan)
+    static ReplicationResult makeFailure(ReplicationError rep, FanoutResult fan)
     {
-        return { LocalApplyResult::makeSuccess(), ReplicationApply::makeFailure(replic), fan };
+        return { LocalApplyResult::makeSuccess(), ReplicationApply::makeFailure(std::move(rep)), fan };
     }
 
     static ReplicationResult makeSuccess(FanoutResult fan)

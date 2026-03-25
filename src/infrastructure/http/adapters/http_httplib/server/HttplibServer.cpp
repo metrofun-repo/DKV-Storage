@@ -23,10 +23,10 @@ void HttplibServer::printServerInfo(std::string_view msg) const
     std::cout << nodeId << " [" << host << ":" << port << "]" << msg << std:: endl;
 }
 
-void HttplibServer::get(const std::string& path, HandlerFunc handler)
+void HttplibServer::get(std::string_view path, HandlerFunc handler)
 {
     printServerInfo(std::string(" -> ") + __func__ + " call");
-    srv.Get(path, [handler = std::move(handler)](const libRequest& req, libResponse& res)
+    srv.Get(std::string(path), [handler = std::move(handler)](const libRequest& req, libResponse& res)
     {
         HttplibServerRequest request(req);
         HttplibServerResponse response(res);
@@ -34,10 +34,10 @@ void HttplibServer::get(const std::string& path, HandlerFunc handler)
     });
 }
 
-void HttplibServer::set(const std::string& path, HandlerFunc handler)
+void HttplibServer::set(std::string_view path, HandlerFunc handler)
 {
-    printServerInfo(path + std::string(" -> ") + __func__ + " call");
-    srv.Post(path, [handler = std::move(handler)](const libRequest&  req, libResponse& res)
+    printServerInfo(std::string(path) + " -> " + __func__ + " call");
+    srv.Post(std::string(path), [handler = std::move(handler)](const libRequest&  req, libResponse& res)
     {
         HttplibServerRequest request(req);
         HttplibServerResponse response(res);
@@ -45,10 +45,10 @@ void HttplibServer::set(const std::string& path, HandlerFunc handler)
     });
 }
 
-void HttplibServer::remove(const std::string& path, HandlerFunc handler)
+void HttplibServer::remove(std::string_view path, HandlerFunc handler)
 {
     printServerInfo(std::string(" -> ") + __func__ + " call");
-    srv.Delete(path, [handler = std::move(handler)](const libRequest&  req, libResponse& res)
+    srv.Delete(std::string(path), [handler = std::move(handler)](const libRequest&  req, libResponse& res)
     {
         HttplibServerRequest request(req);
         HttplibServerResponse response(res);

@@ -3,7 +3,6 @@
 #include "AppConfig.h"
 #include "application/entrypoint/types/EntryPointTypes.h"
 
-
 namespace app::entrypoint {
 
 using namespace app::entrypoint::types;
@@ -13,24 +12,23 @@ class App
 
     HttpClient client;
     HttpServer server;
-    HttpReplicationSender replicaSender;
+    HttpClusterSender clusterSender;
 
     Storage        storage;
     StorageService storageService;
     
     QueryService   queryService;
-    
-    ReplicatorService replicatorService;
-    ReplicationApplyService applyService; 
 
-    ClientReadHandler clientReadHandler;
-    ClientWriteHandler clientWriteHandler;
+    ClusterState clusterState;
+    HeartbeatService hbService;
+    ReplicationService rpService;
 
-    ReplicationWriteHandler replicaWriteHandler;
-
-    PublicHttpHandler publicHandler;
-    ReplicationHttpHandler replicaHandler;
+    ExternalHttpHandler publicHandler;
+    InternalHttpHandler clusterHandler;
     HttpRequestRouter requestRouter;
+
+    HeartbeatLoop hbLoop;
+    CompactionLoop cmLoop;
 
 public:
     App(AppConfig config);
