@@ -1,21 +1,25 @@
 #pragma once
 
-#include "common/utils/json_utils.h"
+#include <variant>
 
 namespace domain::storage::model {
+
+struct TombstoneTag {};
 
 template<typename T>
 struct VersionedValue
 {
-    T value;
-    uint64_t timestamp;
-    
-    common::json::json_t toJson() const
+    std::variant<T, TombstoneTag> value;
+    int64_t timestamp;
+
+    static VersionedValue tombstone(int64_t ts)
     {
-        return {
-            { "value", value },
-            { "timestamp", timestamp }
-        };
+        return VersionedValue { TombstoneTag{}, ts};
+    }
+
+    bool isTombstone() const
+    {
+        return std::holds_alternative<TombstoneTag>(value);
     }
 };
 
