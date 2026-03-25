@@ -5,6 +5,7 @@ namespace infra::transport::error {
 enum class TransportErrorCode
 {
     Unknown,
+    UnknownMessage,
     //client errors
     Timeout,
     ConnectionRefused,

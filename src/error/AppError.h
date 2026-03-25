@@ -1,22 +1,9 @@
 #pragma once
-
-#include <string>
-#include "StorageError.h"
-#include "AppError.h"
+#include "core/types/Error.h"
+#include "AppErrorCode.h"
 
 namespace error {
 
-enum class AppErrorType
-{
-    InvalidRequest,
-    StorageFailure
-};
-
-struct AppError
-{
-    AppErrorType appError;
-    StorageError storageError;
-    std::string details;
-};
+using AppError = core::types::Error<AppErrorCode>;
 
 } // namespace error

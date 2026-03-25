@@ -1,14 +1,10 @@
 #pragma once
 
-#include <optional>
+#include "core/types/Error.h"
 #include "TransportErrorCode.h"
 
 namespace infra::transport::error {
 
-struct TransportError
-{
-    TransportErrorCode code;
-    std::optional<int> httpStatus;
-};
+using TransportError = core::types::Error<TransportErrorCode>;
 
 } // namespace infra::transport::senders
