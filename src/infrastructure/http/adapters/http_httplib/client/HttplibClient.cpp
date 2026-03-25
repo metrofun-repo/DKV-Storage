@@ -4,9 +4,9 @@
 
 namespace infra::http::adapters::httplib::client {
 
-using Error     = infra::http::client::HttpClientError;
-using ErrorCode = infra::http::client::HttpClientErrorCode;
-using Payload   = infra::http::client::HttpClientResponsePayload;
+using Error     = http::client::HttpClientError;
+using ErrorCode = http::client::HttpClientErrorCode;
+using Payload   = http::client::HttpClientResponsePayload;
 
 using libError  = ::httplib::Error;
 using libClient = ::httplib::Client;
@@ -18,10 +18,11 @@ HttplibClient::PostResult HttplibClient::post(
     int port,
     std::string_view path,
     std::string_view body,
+    std::size_t size,
     std::string_view contentType) const
 {
     libClient client(host.data(), port);
-    auto result = client.Post(path.data(), body.data(), contentType.data());
+    auto result = client.Post(path.data(), body.data(), size, contentType.data());
 
     if(!result)
     {

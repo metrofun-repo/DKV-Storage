@@ -1,8 +1,8 @@
 #pragma once
-
+#include <string_view>
 namespace infra::http::routing::routes {
 
-    inline const char * PUBLIC { "/kv" };
-    inline const char * REPLICATE { "/replicate" };
+    inline constexpr std::string_view EXTERNAL { "/kv" };
+    inline constexpr std::string_view INTERNAL { "/cluster" };
 
 } // namespace infra::http::server::routes

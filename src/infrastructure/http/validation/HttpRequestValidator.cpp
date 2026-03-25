@@ -2,7 +2,7 @@
 
 namespace infra::http::validation {
 
-HttpRequestValidator::ValidationResult HttpRequestValidator::requireParam(const HttpRequest& req, std::string_view param)
+HttpRequestValidator::ValidationResult HttpRequestValidator::requireParam(const infra::http::server::HttpRequest& req, std::string_view param)
 {
     if(!req.hasParam(param))
     {
@@ -11,7 +11,7 @@ HttpRequestValidator::ValidationResult HttpRequestValidator::requireParam(const 
     return ValidationResult::makeSuccess();
 }
 
-HttpRequestValidator::ValidationResult HttpRequestValidator::requireBody(const HttpRequest& req)
+HttpRequestValidator::ValidationResult HttpRequestValidator::requireBody(const infra::http::server::HttpRequest& req)
 {
     if(req.getBody().empty())
     {

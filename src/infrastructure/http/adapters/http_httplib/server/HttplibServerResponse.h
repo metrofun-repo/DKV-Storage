@@ -5,7 +5,7 @@
 
 namespace infra::http::adapters::httplib::server {
 
-class HttplibServerResponse : public infra::http::server::HttpResponse
+class HttplibServerResponse : public http::server::HttpResponse
 {
     using Response = ::httplib::Response;
 
@@ -15,6 +15,7 @@ public:
     void setBody(std::string body) override;
     void setHeader(std::string key, std::string value) override;
     void setContent(std::string body, std::string contentType) override;
+    void setContent(const char* body, std::size_t n, std::string contentType) override;
 
 private:
     Response& raw;

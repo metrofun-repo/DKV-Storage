@@ -1,40 +1,57 @@
 #include "QueryService.h"
 
-#include "application/api/validation/ClientRequestValidator.h"
+#include "error/AppError.h"
+#include "application/api/builders/ExternalResponseBuilder.h"
+#include "application/api/validation/ExternalRequestValidator.h"
 
 namespace app::storage::services {
 
-using app::api::validation::ClientRequestValidator;
+using ExternalResponseBuilder  = api::builders::ExternalResponseBuilder;
+using ExternalRequestValidator = api::validation::ExternalRequestValidator;
 
-QueryService::QueryService(StorageService& kvService)
-    : domain(kvService)
+using QueryResult = core::types::Expected<app::types::VersionedValue, error::AppError>;
+
+QueryService::QueryService(app::types::StorageService& service)
+    : storage(service)
 {}
 
-QueryService::Result QueryService::get(const ClientRequest& req) const
+app::api::dto::ExternalResponse QueryService::get(const api::dto::ExternalRequest& req) const
 {
-    auto valid = ClientRequestValidator::validate(req);
+    auto valid = ExternalRequestValidator::validate(req);
     if(!valid.hasValue())
     {
-        return Result::makeFailure(
-            error::AppError {
-                error::AppErrorType::InvalidRequest,
-                error::StorageError::None,
-                valid.error()
-            });
+        return ExternalResponseBuilder::from(
+            QueryResult::makeFailure(error::AppError { 
+                error::AppErrorCode::InvalidRequest,
+                valid.error().message
+            })
+        );
     }
 
-    auto getRes = domain.get(req.key);
+    auto getRes = storage.get(req.key);
     if(!getRes.hasValue())
     {
-        return Result::makeFailure(
-            error::AppError{
-                error::AppErrorType::StorageFailure,
-                getRes.error(),
-                ""
-            });            
+        return ExternalResponseBuilder::from(
+            QueryResult::makeFailure(error::AppError { 
+                error::AppErrorCode::StorageFailure,
+                getRes.error().message
+            })
+        );
     }
 
-    return Result::makeSuccess(getRes.value());
+    const app::types::VersionedValue& value = getRes.value();
+
+    if(value.isTombstone())
+    {
+        return ExternalResponseBuilder::from(
+            QueryResult::makeFailure(error::AppError { 
+                error::AppErrorCode::KeyNotFound,
+                "Key not found"
+            })
+        );        
+    }
+
+    return ExternalResponseBuilder::from(QueryResult::makeSuccess(value));
 }
 
 } // namespace app::storage::services

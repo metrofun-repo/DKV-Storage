@@ -12,22 +12,22 @@ public:
     {
         std::string method;
         std::string path;
-        Route(const std::string& m, const std::string& p) : method(m), path(p) {}
+        Route(std::string_view m, std::string_view p) : method(std::string(m)), path(std::string(p)) {}
     };
 
     std::vector<Route> routes;
 
-    void set(const std::string& path, HandlerFunc) override
+    void set(std::string_view path, HandlerFunc) override
     {
         routes.emplace_back("POST", path);
     }
 
-    void get(const std::string& path, HandlerFunc) override
+    void get(std::string_view path, HandlerFunc) override
     {
         routes.emplace_back("GET", path);
     }
 
-    void remove(const std::string& path, HandlerFunc) override
+    void remove(std::string_view path, HandlerFunc) override
     {
         routes.emplace_back("DELETE", path);
     }

@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
     auto parseResult = parser.parse();
     if(!parseResult.hasValue())
     {
-        std::cout << "Failed to parse agrs: " << parseResult.error().details << std::endl;
+        std::cout << "Failed to parse agrs: " << parseResult.error().message << std::endl;
         std::cout << "Press Enter to exit ...";
         std::string _;
         std::getline(std::cin, _);

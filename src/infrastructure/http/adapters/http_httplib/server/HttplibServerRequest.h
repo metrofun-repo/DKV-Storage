@@ -13,7 +13,7 @@ public:
     explicit HttplibServerRequest(const Request& raw);
 
     bool hasParam(std::string_view param) const override;
-    std::string_view getParam(std::string_view param) const override;
+    std::string getParam(std::string_view param) const override;
 
     bool hasHeader(std::string_view key) const override;
     std::string_view getHeader(std::string_view key) const override;

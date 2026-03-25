@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <string_view>
 
 namespace infra::http::server {
@@ -10,7 +11,7 @@ public:
     virtual ~HttpRequest() = default;
 
     virtual bool hasParam(std::string_view param) const = 0;
-    virtual std::string_view getParam(std::string_view param) const = 0;
+    virtual std::string getParam(std::string_view param) const = 0;
 
     virtual bool hasHeader(std::string_view key) const = 0;
     virtual std::string_view getHeader(std::string_view key) const = 0;

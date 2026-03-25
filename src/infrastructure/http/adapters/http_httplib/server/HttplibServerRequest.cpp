@@ -11,7 +11,7 @@ bool HttplibServerRequest::hasParam(std::string_view param) const
     return raw.has_param(param.data());
 }
 
-std::string_view HttplibServerRequest::getParam(std::string_view param) const
+std::string HttplibServerRequest::getParam(std::string_view param) const
 {
     return raw.get_param_value(param.data());
 }

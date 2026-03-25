@@ -6,7 +6,7 @@
 
 namespace infra::http::adapters::httplib::client {
 
-class HttplibClient : public infra::http::client::HttpClient
+class HttplibClient : public http::client::HttpClient
 {
 public:
     PostResult post(
@@ -14,6 +14,7 @@ public:
         int port,
         std::string_view path,
         std::string_view body,
+        std::size_t size,
         std::string_view contentType
     ) const override;
 };
