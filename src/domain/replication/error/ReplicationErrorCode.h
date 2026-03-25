@@ -7,6 +7,7 @@ namespace domain::replication::error {
 enum class ReplicationErrorCode
 {
     None = 0,
+    InvalidRequest,
     NodeUnreachable,
     NodeTimeout,
     NodeInvalidResponse,
@@ -25,9 +26,10 @@ template<>
 struct EnumValues<domain::replication::error::ReplicationErrorCode>
 {
     using Enum = domain::replication::error::ReplicationErrorCode;
-    static inline constexpr std::array<Enum, 9> values =
+    static inline constexpr std::array<Enum, 10> values =
     {
         Enum::None,
+        Enum::InvalidRequest,
         Enum::NodeUnreachable,
         Enum::NodeTimeout,
         Enum::NodeInvalidResponse,
