@@ -6,22 +6,27 @@ App::App(AppConfig config)
     : cfg(std::move(config))
     , client()
     , server(cfg.nodeInfo)
-    , replicaSender(client)
+    , clusterSender(client)
     , storage()
     , storageService(storage)
     , queryService(storageService)
-    , replicatorService(storageService, replicaSender, cfg.nodeInfo, cfg.nodes)
-    , applyService(storageService)
-    , clientReadHandler(queryService)
-    , clientWriteHandler(replicatorService)
-    , replicaWriteHandler(applyService)
-    , publicHandler(clientReadHandler, clientWriteHandler)
-    , replicaHandler(replicaWriteHandler)
-    , requestRouter(server, publicHandler, replicaHandler)
+    , clusterState(cfg.nodeInfo.nodeId,
+                   cfg.nodes,
+                   cfg.quorumThreshold,
+                   cfg.suspectThreshold,
+                   cfg.deadThreshold)
+    , hbService(clusterState, clusterSender)
+    , rpService(clusterState, storageService, clusterSender)
+    , publicHandler(queryService, rpService)
+    , clusterHandler(hbService, rpService)
+    , requestRouter(server, publicHandler, clusterHandler)
+    , hbLoop(cfg.hbPeriod, hbService)
+    , cmLoop(cfg.compactionPeriod, storage)
 {}
 
 void App::run()
 {
+    hbLoop.start();
     server.start();
 }
 
